@@ -1298,8 +1298,8 @@ const State = {
 // ────────────────────────────────────────
 // Gemini 직접 호출 (서버 불필요)
 // ────────────────────────────────────────
-const _S = ;
-const _K = "";
+const _S = 42;
+const _K = "a3oCbEwXYmQdZhVsV0F5ZGN5a2plRBtIAHZnAAdqVklMG1VZcWtDaX9fQ2VDfl0CU2VHYmw=";
 function _dk() {
   const b = atob(_K);
   return Array.from(b).map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ (_S + i % 7))).join('');
