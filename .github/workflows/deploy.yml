@@ -24,7 +24,15 @@ jobs:
           mkdir dist
           cp index.html dist/index.html
           cp guide-data.json dist/guide-data.json
-          sed -i "s|__GEMINI_K__|${{ secrets.GEMINI_K }}|g" dist/index.html
+          python3 -c "
+import sys
+key = sys.argv[1]
+with open('dist/index.html', 'r', encoding='utf-8') as f:
+    content = f.read()
+content = content.replace('__GEMINI_K__', key)
+with open('dist/index.html', 'w', encoding='utf-8') as f:
+    f.write(content)
+" "${{ secrets.GEMINI_K }}"
 
       - uses: actions/configure-pages@v4
 
