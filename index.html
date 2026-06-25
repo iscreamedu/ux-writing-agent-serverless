@@ -7260,8 +7260,19 @@ window.addEventListener('popstate', (e) => {
   localStorage.removeItem(k);
 });
 
-App.showView('home');
-App.setUserType('elementary');
+(async () => {
+  try {
+    const resp = await fetch('./guide-data.json');
+    if (resp.ok) {
+      const data = await resp.json();
+      ['little', 'elementary', 'parent'].forEach(t => {
+        if (data[t]) Object.assign(_mem[t], data[t]);
+      });
+    }
+  } catch {}
+  App.showView('home');
+  App.setUserType('elementary');
+})();
 
 document.addEventListener('click', e => {
   const dropdown = document.getElementById('utype-dropdown');
