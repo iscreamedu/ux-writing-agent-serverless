@@ -6,11 +6,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -18,11 +23,15 @@ jobs:
         run: |
           mkdir dist
           cp index.html dist/index.html
+          cp guide-data.json dist/guide-data.json
           sed -i "s/__GEMINI_S__/${{ secrets.GEMINI_S }}/g" dist/index.html
           sed -i "s|__GEMINI_K__|${{ secrets.GEMINI_K }}|g" dist/index.html
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          path: ./dist
+
+      - uses: actions/deploy-pages@v4
+        id: deployment
